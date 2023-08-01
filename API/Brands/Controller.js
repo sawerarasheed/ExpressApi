@@ -1,13 +1,13 @@
-const Category = require('./Model')
+const Brand = require('./Model')
 const { connect } = require('mongoose')
 require('dotenv').config()
 
-const getAllCategories = async(req, res) => {
+const getAllBrands = async(req, res) => {
     try {
         await connect(process.env.MONGO_URL)
-        const allCategories = await Category.find()
+        const allBrands = await Brand.find()
         res.json({
-            category: allCategories
+            Brand: allBrands
         })
 
     }
@@ -21,14 +21,14 @@ const getAllCategories = async(req, res) => {
   }
 
 
-  const getCategoryById = async(req, res) => {
+  const getBrandById = async(req, res) => {
     const { _id } = req.query
 
 
     try {
         await connect(process.env.MONGO_URL)
-        const category = await Category.findOne({ _id })
-        res.json({ category })
+        const Brand = await Brand.findOne({ _id })
+        res.json({ Brand })
     }
 
 
@@ -40,14 +40,14 @@ const getAllCategories = async(req, res) => {
     }
 
 
-const getCategoryByName = async(req, res) => {
-    const { CategoryName } = req.params
+const getBrandByName = async(req, res) => {
+    const { BrandName } = req.params
 
 
     try {
         await mongoose.connect(process.env.MONGO_URL)
-        const category = await category.findOne({  CategoryName })
-        res.json({category })
+        const Brand = await Brand.findOne({  BrandName })
+        res.json({Brand })
 
     }
 
@@ -61,10 +61,10 @@ const getCategoryByName = async(req, res) => {
     }
     }
 
-const createCategory = async(req, res) => {
-    const { CategoryName, CategoryImage } = req.body
+const createBrand = async(req, res) => {
+    const { BrandName, BrandImage } = req.body
 
-    if (!CategoryName || !CategoryImage) {
+    if (!BrandName || !BrandImage) {
         res.status(403).json({
             message: "Missing Required Field"
         })
@@ -73,21 +73,21 @@ const createCategory = async(req, res) => {
     else {
         try {
             await connect (process.env.MONGO_URL)
-            const checkExisting = await Category.exists({ CategoryName })
+            const checkExisting = await Brand.exists({ BrandName })
 
             if (checkExisting) {
                 res.status(400).json({
-                    message: "Category Already Exists"
+                    message: "Brand Already Exists"
                 })
             }
 
             else {
-                await Category.create({ CategoryName, CategoryImage })
-                const allCategories = await Category.find()
+                await Brand.create({ BrandName, BrandImage })
+                const allBrands = await Brand.find()
 
                 res.json({
                     message: "DB Connected",
-                    category: allCategories
+                    Brand: allBrands
                 })
 
             }
@@ -106,17 +106,17 @@ const createCategory = async(req, res) => {
     }
     }
 
-const deleteCategory = async(req, res) => {
+const deleteBrand = async(req, res) => {
     const { _id } = req.body
 
 
     try {
         await connect(process.env.MONGO_URL)
-        await Category.deleteOne({ _id })
-        const category = await Category.find()
+        await Brand.deleteOne({ _id })
+        const Brand = await Brand.find()
         res.status(200).json({
             message: "Deleted Successfully",
-            category
+            Brand
         })
     }
 
@@ -128,20 +128,20 @@ const deleteCategory = async(req, res) => {
     }
     }
 
-const updateCategory = async(req, res) => {
-    const { _id, CategoryName, CategoryImage } = req.body
+const updateBrand = async(req, res) => {
+    const { _id, BrandName, BrandImage } = req.body
 
     const filter = { _id };
-    const update = { CategoryName, CategoryImage };
+    const update = { BrandName, BrandImage };
 
     try {
         await connect(process.env.MONGO_URL)
 
-        await Category.findOneAndUpdate(filter, update, {
+        await Brand.findOneAndUpdate(filter, update, {
             new: true
         });
 
-        const category = await Category.find()
+        const Brand = await Brand.find()
 
         res.json({
             message: "Successfully updated",
@@ -158,4 +158,12 @@ const updateCategory = async(req, res) => {
     }
 
     }
-  module.exports = {getAllCategories, getCategoryById , getCategoryByName, createCategory, updateCategory, deleteCategory}
+
+
+
+
+
+
+
+
+module.exports = {getAllBrands, getBrandById , getBrandByName, createBrand, updateBrand, deleteBrand}

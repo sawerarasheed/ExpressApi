@@ -1,13 +1,13 @@
-const Category = require('./Model')
+const Product = require('./Model')
 const { connect } = require('mongoose')
 require('dotenv').config()
 
-const getAllCategories = async(req, res) => {
+const getAllProducts = async(req, res) => {
     try {
         await connect(process.env.MONGO_URL)
-        const allCategories = await Category.find()
+        const allProducts = await Product.find()
         res.json({
-            category: allCategories
+            Product: allProducts
         })
 
     }
@@ -21,14 +21,14 @@ const getAllCategories = async(req, res) => {
   }
 
 
-  const getCategoryById = async(req, res) => {
+  const getProductById = async(req, res) => {
     const { _id } = req.query
 
 
     try {
         await connect(process.env.MONGO_URL)
-        const category = await Category.findOne({ _id })
-        res.json({ category })
+        const Product = await Product.findOne({ _id })
+        res.json({ Product })
     }
 
 
@@ -40,14 +40,14 @@ const getAllCategories = async(req, res) => {
     }
 
 
-const getCategoryByName = async(req, res) => {
-    const { CategoryName } = req.params
+const getProductByName = async(req, res) => {
+    const { ProductName } = req.params
 
 
     try {
         await mongoose.connect(process.env.MONGO_URL)
-        const category = await category.findOne({  CategoryName })
-        res.json({category })
+        const Product = await Product.findOne({  ProductName })
+        res.json({Product })
 
     }
 
@@ -61,10 +61,10 @@ const getCategoryByName = async(req, res) => {
     }
     }
 
-const createCategory = async(req, res) => {
-    const { CategoryName, CategoryImage } = req.body
+const createProduct = async(req, res) => {
+    const { ProductName, ProductImage } = req.body
 
-    if (!CategoryName || !CategoryImage) {
+    if (!ProductName || !ProductImage) {
         res.status(403).json({
             message: "Missing Required Field"
         })
@@ -73,21 +73,21 @@ const createCategory = async(req, res) => {
     else {
         try {
             await connect (process.env.MONGO_URL)
-            const checkExisting = await Category.exists({ CategoryName })
+            const checkExisting = await Product.exists({ ProductName })
 
             if (checkExisting) {
                 res.status(400).json({
-                    message: "Category Already Exists"
+                    message: "Product Already Exists"
                 })
             }
 
             else {
-                await Category.create({ CategoryName, CategoryImage })
-                const allCategories = await Category.find()
+                await Product.create({ ProductName, ProductImage })
+                const allProducts = await Product.find()
 
                 res.json({
                     message: "DB Connected",
-                    category: allCategories
+                    Product: allProducts
                 })
 
             }
@@ -106,17 +106,17 @@ const createCategory = async(req, res) => {
     }
     }
 
-const deleteCategory = async(req, res) => {
+const deleteProduct = async(req, res) => {
     const { _id } = req.body
 
 
     try {
         await connect(process.env.MONGO_URL)
-        await Category.deleteOne({ _id })
-        const category = await Category.find()
+        await Product.deleteOne({ _id })
+        const Product = await Product.find()
         res.status(200).json({
             message: "Deleted Successfully",
-            category
+            Product
         })
     }
 
@@ -128,24 +128,24 @@ const deleteCategory = async(req, res) => {
     }
     }
 
-const updateCategory = async(req, res) => {
-    const { _id, CategoryName, CategoryImage } = req.body
+const updateProduct = async(req, res) => {
+    const { _id, ProductName, ProductImage } = req.body
 
     const filter = { _id };
-    const update = { CategoryName, CategoryImage };
+    const update = { ProductName, ProductImage };
 
     try {
         await connect(process.env.MONGO_URL)
 
-        await Category.findOneAndUpdate(filter, update, {
+        await Product.findOneAndUpdate(filter, update, {
             new: true
         });
 
-        const category = await Category.find()
+        const Product = await Product.find()
 
         res.json({
             message: "Successfully updated",
-            category
+            Product
         })
 
     }
@@ -158,4 +158,4 @@ const updateCategory = async(req, res) => {
     }
 
     }
-  module.exports = {getAllCategories, getCategoryById , getCategoryByName, createCategory, updateCategory, deleteCategory}
+  module.exports = {getAllProducts, getProductById , getProductByName, createProduct, updateProduct, deleteProduct}
