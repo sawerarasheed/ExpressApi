@@ -17,7 +17,7 @@ const Login = async (req, res) => {
     else {
 
         try {
-            await connect(process.env.MONGO_URI)
+            await connect(process.env.MONGO_URL)
             const CheckUser = await User.findOne({ Email })
 
             if (!CheckUser) {
@@ -80,7 +80,7 @@ const Signup = async (req, res) => {
     else {
 
         try {
-            await connect(process.env.MONGO_URI)
+            await connect(process.env.MONGO_URL)
 
             const CheckUser = await User.findOne({ Email })
 
@@ -120,7 +120,7 @@ const Signup = async (req, res) => {
 const getAllUsers = async (req, res) => {
 
     try {
-        await connect(process.env.MONGO_URI)
+        await connect(process.env.MONGO_URL)
         const users = await User.find()
 
         res.json({ users })
@@ -144,7 +144,7 @@ const updateProfile = async (req, res) => {
     const update = { Email, Name, ProfilePic };
 
     try {
-        await connect(process.env.MONGO_URI)
+        await connect(process.env.MONGO_URL)
         const updated = await User.findOneAndUpdate(filter, update, {
             new: true
         })
@@ -170,7 +170,7 @@ const userByID = async (req, res) => {
 
 
     try {
-        await connect(process.env.MONGO_URI)
+        await connect(process.env.MONGO_URL)
         const user = await User.findOne({ _id })
 
         res.json({ user })
@@ -188,7 +188,7 @@ const deleteUser = async (req, res) => {
     const { _id } = req.body
 
     try {
-        await connect(process.env.MONGO_URI)
+        await connect(process.env.MONGO_URL)
         await User.deleteOne({ _id })
 
         res.json({ message: "User Deleted Successfully" })
