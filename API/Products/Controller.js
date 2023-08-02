@@ -60,6 +60,46 @@ const getProductByName = async(req, res) => {
 
     }
     }
+    const getProductByBrand = async(req, res) => {
+        const { BrandName } = req.params
+    
+    
+        try {
+            await mongoose.connect(process.env.MONGO_URL)
+            const Product = await Product.findOne({  BrandName })
+            res.json({Product })
+    
+        }
+    
+        catch (error) {
+            res.json(
+                {
+                    message: error.message
+                }
+            )
+    
+        }
+        }
+        const getProductByCategory = async(req, res) => {
+            const { CategoryName } = req.params
+        
+        
+            try {
+                await mongoose.connect(process.env.MONGO_URL)
+                const Product = await Product.findOne({  CategoryName })
+                res.json({Product })
+        
+            }
+        
+            catch (error) {
+                res.json(
+                    {
+                        message: error.message
+                    }
+                )
+        
+            }
+            }
 
 const createProduct = async(req, res) => {
     const { ProductName, ProductImage } = req.body
@@ -158,4 +198,4 @@ const updateProduct = async(req, res) => {
     }
 
     }
-  module.exports = {getAllProducts, getProductById , getProductByName, createProduct, updateProduct, deleteProduct}
+  module.exports = {getAllProducts,getProductByBrand,getProductByCategory, getProductById , getProductByName, createProduct, updateProduct, deleteProduct}
